@@ -26,12 +26,10 @@ Tutorial Section: TT4L
 #define ROBOT_H
 using namespace std;
 
-// Forward declaration of Battlefield class
 class Battlefield;
 
 class Robot {
 private:
-    // Represent coordinates of robot in the battlefield
     int x, y;
 
 protected:
@@ -45,13 +43,9 @@ public:
     Robot(int x, int y, string name, char symbol, Battlefield *battlefield)
         : x(x), y(y), name(name), symbol(symbol), lives(3), kills(0), battlefield(battlefield) {}
 
-    // Pure virtual functions for looking
     virtual void look(int x, int y) = 0;
-    // Pure virtual function for moving
     virtual void move() = 0;
-    // Pure virtual function for firing
     virtual void fire(int x, int y) = 0;
-    //Pure virtual function for stepping
     virtual void step() = 0;
     
     

@@ -28,17 +28,12 @@ Tutorial Section: TT4L
 #include "Robot.h"
 using namespace std;
 
-// MovingRobot is an abstract class derived from the Robot class.
-// It serves as a base class for robots that have movement capabilities.
 class MovingRobot : virtual public Robot {
 public:
-    // Constructor for MovingRobot, initializing the base Robot class
     MovingRobot(int x, int y, string name, char symbol, Battlefield* battlefield)
         : Robot(x, y, name, symbol, battlefield) {}
 
-    // Pure virtual function for moving the robot.
-    // This function must be implemented by any subclass of MovingRobot.
     virtual void move() = 0;
 };
 
-#endif // MOVINGROBOT_H
+#endif

@@ -40,39 +40,46 @@ class UltimateRobot;
 
 class TerminatorRoboCop : public RoboCop, public Terminator {
 private:
-    bool enemyFound;
-    int enemyX, enemyY;
 
 public:
     TerminatorRoboCop(int initX, int initY, string name, Battlefield* battlefield)
-        : Robot(initX, initY, name, name[0], battlefield),  // Initialize Robot base class
-          RoboCop(initX, initY, name, battlefield),         // Initialize RoboCop
-          Terminator(initX, initY, name, battlefield),      // Initialize Terminator
-          MovingRobot(initX, initY, name, name[0], battlefield),    // Initialize MovingRobot
-          ShootingRobot(initX, initY, name, name[0], battlefield),  // Initialize ShootingRobot
-          SeeingRobot(initX, initY, name, name[0], battlefield),    // Initialize SeeingRobot
-          SteppingRobot(initX, initY, name, name[0], battlefield),  // Initialize SteppingRobot
-          enemyFound(false), enemyX(0), enemyY(0) {}
+        : Robot(initX, initY, name, name[0], battlefield),
+          RoboCop(initX, initY, name, battlefield),
+          Terminator(initX, initY, name, battlefield),
+          MovingRobot(initX, initY, name, name[0], battlefield),
+          ShootingRobot(initX, initY, name, name[0], battlefield),
+          SeeingRobot(initX, initY, name, name[0], battlefield),
+          SteppingRobot(initX, initY, name, name[0], battlefield) {}
 
 
    void upgradeToUltimateRobot(Robot*& ultimateRobot);
 
-    // Override methods from base classes as needed
     void look(int x, int y) override {
-        Terminator::look(x, y);  // Call Terminator's look method
+        Terminator::look(x, y);
     }
 
     void move() override {
-        RoboCop::move();  // Call RoboCop's move method
+        if (enemyFound) {
+            int oldX = getX();
+            int oldY = getY();
+            if (battlefield->hasRobotAt(enemyX, enemyY)) {
+                enemyName = battlefield->getRobotAt(enemyX, enemyY)->getName();
+                battlefield->removeRobotAt(enemyX, enemyY);
+            }
+            cout << name << " moved to (" << enemyX << ", " << enemyY << ")" << endl;
+            battlefield->updatePosition(this, oldX, oldY, enemyX, enemyY);
+        } else {
+            RoboCop::move();
+        }
     }
 
    void fire(int x, int y) override {
-    RoboCop::fire(x, y); // Call RoboCop's fire method with the provided coordinates
+    RoboCop::fire(x, y);
 }
 
 
     void step() override {
-        Terminator::step();  // Call Terminator's step method
+        Terminator::step();
         if (kills >= 3){
             resetKills();
             Robot* ultimateRobot = nullptr;

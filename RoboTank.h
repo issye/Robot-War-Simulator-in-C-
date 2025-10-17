@@ -33,43 +33,32 @@ Tutorial Section: TT4L
 #include <ctime>
 using namespace std;
 
-
-//RoboTank class
 class RoboTank : public virtual ShootingRobot 
 {
 public:
-    // Constructor and initialization
     RoboTank(int initX, int initY, string name, Battlefield* battlefield)
         : Robot(initX, initY, name, name[0], battlefield),
           ShootingRobot(initX, initY, name, name[0], battlefield) {}
 
     void upgradeToUltimateRobot(Robot*& ultimateRobot);
     
-    // Look, move and step are empty as RoboTank does no provide the actions
     void look(int x, int y) override {}
     void move() override {}
     void step() override {}
     void fire(int x, int y) override 
     {   
-        // Randomly generates targetX and targetY within the boundaries of battlefield using rand
         int targetX = rand() % battlefield->getWidth();
         int targetY = rand() % battlefield->getHeight();
 
         cout << name << " is firing at (" << targetX << ", " << targetY << ")" << endl;
         
-        // Ensures the target is within the boundaries
         if (targetX >= 0 && targetX < battlefield->getWidth() && targetY >= 0 && targetY < battlefield->getHeight()) 
         {
-            // Check if there is robot at target coordinates & if the robot it detected is itself
-            // If there's robot there, it announces that RoboTank has killed the robot
-            // Kills will be incremented
             if (battlefield->hasRobotAt(targetX, targetY) && battlefield->getRobotAt(targetX, targetY)->getName() != getName()) {
                 cout << name << " killed " << battlefield->getRobotAt(targetX, targetY)->getName() << "!" << endl;
                 kills++;
-                // Removes the killed robot from the battlefield
-                battlefield->removeRobotAt(targetX, targetY); // Remove the enemy robot
+                battlefield->removeRobotAt(targetX, targetY);
                 
-                // If it has achieved 3 or more kills, it will be upgraded to UltimateRobot
             if (kills >= 3)
           {
             resetKills();
@@ -77,18 +66,15 @@ public:
             upgradeToUltimateRobot(ultimateRobot);
           }
             }
-            // Check if the robot is trying to fire at itself
              else if (battlefield->hasRobotAt(targetX, targetY) && battlefield->getRobotAt(targetX, targetY)->getName() == getName()) 
             {
                 cout << name << " cannot fire at itself!" << endl;
             } 
-            // Announces that the robot is firing at an empty place
             else
             {
                 cout << name << " fired at an empty location." << endl;
             }
         }
-            // Generates error messge if coordinate is out of battlefield's boundaries
             else 
             {
                 cout << name << " cannot fire outside the battlefield boundaries." << endl;

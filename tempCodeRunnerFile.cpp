@@ -23,11 +23,11 @@ Tutorial Section: TT4L
 **********|**********|**********/
 
 #include <iostream>
-#include <fstream>    // For file operations
-#include <sstream>    // For string stream operations
+#include <fstream>
+#include <sstream>
 #include <string>
-#include <cstdlib>    // For rand() and srand()
-#include <ctime>      // For time() to seed the random number generator
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 #include "Battlefield.h"
 #include "Robot.h"
@@ -46,41 +46,35 @@ Tutorial Section: TT4L
 using namespace std;
 
 int main() {
-    // Open the configuration file "config.txt"
     ifstream configFile("config.txt");
     if (!configFile.is_open()) {
         cerr << "Error opening config.txt" << endl;
-        return 1; // Exit if the file cannot be opened
+        return 1;
     }
 
     int m, n, steps, numRobots;
     string line;
 
-    // Read battlefield dimensions
     getline(configFile, line);
     if (sscanf(line.c_str(), "M by N : %d %d", &m, &n) != 2) {
         cerr << "Error reading battlefield dimensions" << endl;
-        return 1; // Exit if the dimensions cannot be read
+        return 1;
     }
 
-    // Read number of steps for the simulation
     getline(configFile, line);
     if (sscanf(line.c_str(), "steps: %d", &steps) != 1) {
         cerr << "Error reading number of steps" << endl;
-        return 1; // Exit if the number of steps cannot be read
+        return 1;
     }
 
-    // Read number of robots
     getline(configFile, line);
     if (sscanf(line.c_str(), "robots: %d", &numRobots) != 1) {
         cerr << "Error reading number of robots" << endl;
-        return 1; // Exit if the number of robots cannot be read
+        return 1;
     }
 
-    // Create the battlefield with the given dimensions and steps
     Battlefield battlefield(m, n, steps);
 
-    // Read robot information from the configuration file and create robot objects
     for (int i = 0; i < numRobots; ++i) {
         getline(configFile, line);
         istringstream iss(line);
@@ -88,27 +82,23 @@ int main() {
         string xStr, yStr;
         int x, y;
 
-        // Parse robot type, name, and coordinates
         if (!(iss >> robotType >> name >> xStr >> yStr)) {
             cerr << "Error reading robot information: " << line << endl;
-            return 1; // Exit if robot information cannot be read
+            return 1;
         }
 
-        // Determine x-coordinate
         if (xStr == "random") {
-            x = rand() % m; // Generate random x-coordinate within battlefield width
+            x = rand() % m;
         } else {
-            x = stoi(xStr); // Convert string to integer
+            x = stoi(xStr);
         }
 
-        // Determine y-coordinate
         if (yStr == "random") {
-            y = rand() % n; // Generate random y-coordinate within battlefield height
+            y = rand() % n;
         } else {
-            y = stoi(yStr); // Convert string to integer
+            y = stoi(yStr);
         }
 
-        // Create robot based on the type and add to the battlefield
         if (robotType == "TerminatorRoboCop") {
             battlefield.addRobot(new TerminatorRoboCop(x, y, name, &battlefield));
         } else if (robotType == "RoboCop") {
@@ -125,14 +115,14 @@ int main() {
             battlefield.addRobot(new UltimateRobot(x, y, name, &battlefield));
         } else {
             cerr << "Invalid robot type: " << robotType << endl;
-            return 1; // Exit if an invalid robot type is encountered
+            return 1;
         }
     }
 
-    configFile.close(); // Close the configuration file
+    configFile.close();
 
-    srand(time(0)); // Seed the random number generator
-    battlefield.simulate(); // Start the battlefield simulation
+    srand(time(0));
+    battlefield.simulate();
 
     return 0;
 }

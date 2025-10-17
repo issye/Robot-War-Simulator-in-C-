@@ -27,15 +27,12 @@ Tutorial Section: TT4L
 #include "Robot.h"
 using namespace std;
 
-// Declares that shootingRobot inherits from robot
 class ShootingRobot : virtual public Robot 
 {
 public:
-    // Constructor
     ShootingRobot(int x, int y, string name, char symbol, Battlefield* battlefield)
         : Robot(x, y, name, symbol, battlefield) {}
     
-    // Pure virtual function
-    virtual void fire(int x, int y) = 0; // Pure virtual function
+    virtual void fire(int x, int y) = 0;
 };
 #endif

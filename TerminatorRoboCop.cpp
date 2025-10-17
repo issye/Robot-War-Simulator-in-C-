@@ -28,21 +28,13 @@ Tutorial Section: TT4L
 #include <iostream>
 using namespace std;
 
-// Function to upgrade TerminatorRoboCop to ultimate robot
 void TerminatorRoboCop::upgradeToUltimateRobot(Robot*& ultimateRobot){
-
-    if(ultimateRobot){
-        ultimateRobot = new UltimateRobot (getX(), getY(), getName(),battlefield);
-
-        ultimateRobot->setLives(getLives());
-        ultimateRobot->setKills(getKills());
-
-        cout << getName() << " has upgraded to ultimateRobot!" << endl;
-        battlefield->removeRobotAt(getX(), getY());
-        battlefield->addRobot(ultimateRobot);
-
-        resetKills();
-    } else {
-        cout << "Error: UltimateRobot not initialized!" << endl;
-    }
+    Robot* oldRobot = this;
+    
+    ultimateRobot = new UltimateRobot (getX(), getY(), getName(), battlefield);
+    ultimateRobot->setLives(getLives());
+    
+    cout << getName() << " has upgraded to UltimateRobot!" << endl;
+    battlefield->addRobot(ultimateRobot);
+    battlefield->markRobotForRemoval(oldRobot);
 }

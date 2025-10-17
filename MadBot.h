@@ -35,43 +35,41 @@ using namespace std;
 
 class UltimateRobot;
 
-// MadBot class
 class MadBot : public virtual ShootingRobot {
 public:
     MadBot(int initX, int initY, string name, Battlefield* battlefield)
         : Robot(initX, initY, name, name[0], battlefield),
           ShootingRobot(initX, initY, name, name[0], battlefield) {}
 
-    // Upgrading to ultimateRobot
     void upgradeToRoboTank(Robot*& roboTank);
 
     void look(int x, int y) override {}
     void move() override {}
     void step() override {}
     void fire(int x, int y) override {
-        static int fireDirection = 0; // 0: Up, 1: Up Right, 2: Right, 3: Down Right, 4: Down, 5: Down Left, 6: Left, 7: Up Left
+        static int fireDirection = 0;
         int targetX = getX();
         int targetY = getY();
 
         switch (fireDirection) {
-            case 0: targetY--; // Up
+            case 0: targetY--;
                 break;
-            case 1: targetX++; // Up Right
+            case 1: targetX++;
                 targetY--;
                 break;
-            case 2: targetX++; // Right
+            case 2: targetX++;
                 break;
-            case 3: targetX++; // Down Right
+            case 3: targetX++;
                 targetY++;
                 break;
-            case 4: targetY++; // Down
+            case 4: targetY++;
                 break;
-            case 5: targetX--; // Down Left
+            case 5: targetX--;
                 targetY++;
                 break;
-            case 6: targetX--; // Left
+            case 6: targetX--;
                 break;
-            case 7: targetX--; // Up Left
+            case 7: targetX--;
                 targetY--;
                 break;
         }
@@ -82,12 +80,10 @@ public:
             if (battlefield->hasRobotAt(targetX, targetY) && battlefield->getRobotAt(targetX, targetY)->getName() != getName()) {
                 cout << name << " killed " << battlefield->getRobotAt(targetX, targetY)->getName() << "!" << endl;
                 kills++;
-                battlefield->removeRobotAt(targetX, targetY); // Remove the enemy robot
+                battlefield->removeRobotAt(targetX, targetY);
 
                 if (kills >= 3) {
-                    cout << name << " has upgraded to RoboTank!" << endl;
-                    resetKills(); // Reset kills
-                    // Upgrade to RoboTank
+                    resetKills();
                     Robot* roboTank = nullptr;
                     upgradeToRoboTank(roboTank);
                     
@@ -101,7 +97,7 @@ public:
             cout << name << " cannot fire outside the battlefield boundaries." << endl;
         }
 
-        fireDirection = (fireDirection + 1) % 8; // Move to the next firing direction
+        fireDirection = (fireDirection + 1) % 8;
     }
 };
 #endif

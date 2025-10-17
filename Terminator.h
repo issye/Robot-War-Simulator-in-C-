@@ -34,16 +34,12 @@ Tutorial Section: TT4L
 #include <iostream>
 using namespace std;
 
-// Forward declares TerminatorRoboCop (To show it will be defined later)
 class TerminatorRoboCop;
 
 class Terminator : public virtual MovingRobot, public virtual SteppingRobot, public virtual SeeingRobot {
-private:
-    // Store the enemy's name
+protected:
     string enemyName;
-    // Flag to inficate enemy has been found
     bool enemyFound;
-    // Coordinate of the enemy
     int enemyX, enemyY;
 
 public:
@@ -56,20 +52,17 @@ public:
 
     void upgradeToTerminatorRoboCop(Robot*& terminatorRoboCop);
 
-    // Look method to scan a 3x3 grid around Terminator
     void look(int x, int y) override {
         int startX = getX() - 1;
         int startY = getY() - 1;
         int endX = getX() + 1;
         int endY = getY() + 1;
 
-        // Check if the 3x3 grid is within the battlefield boundaries
         if (startX < 0) startX = 0;
         if (startY < 0) startY = 0;
         if (endX >= battlefield->getWidth()) endX = battlefield->getWidth() - 1;
         if (endY >= battlefield->getHeight()) endY = battlefield->getHeight() - 1;
 
-        // Check if the 3x3 grid has an enemy robot
         enemyFound = false;
         for (int i = startX; i <= endX; i++) {
             for (int j = startY; j <= endY; j++) {
@@ -77,12 +70,12 @@ public:
                     cout << name << " is looking around and found enemy robot " << battlefield->getRobotAt(i, j)->getName() << endl;
                     enemyFound = true;
                     enemyY = j;
-                    break; // Exit the inner loop if an enemy is found
+                    break;
                 }
             }
             if (enemyFound) {
                 enemyX = i;
-                break; // Exit the outer loop if an enemy is found
+                break;
             }
         }
 
@@ -97,52 +90,50 @@ public:
         int direction;
 
         if (enemyFound)
-         { // If an enemy was found during look()
+         {
             newX = enemyX;
             newY = enemyY;
             enemyName = battlefield->getRobotAt(enemyX,enemyY)->getName();
             battlefield->removeRobotAt(enemyX, enemyY);
-        } else { // If no enemy was found, move randomly
+        } else {
             do {
-                direction = rand() % 8; // Generate a random number between 0 and 7
+                direction = rand() % 8;
 
                 switch (direction) {
                     case 0:
-                        newY--; // Up
+                        newY--;
                         break;
                     case 1:
-                        newY++; // Down
+                        newY++;
                         break;
                     case 2:
-                        newX--; // Left
+                        newX--;
                         break;
                     case 3:
-                        newX++; // Right
+                        newX++;
                         break;
                     case 4:
-                        newX--; // Up Left
+                        newX--;
                         newY--;
                         break;
                     case 5:
-                        newX++; // Up Right
+                        newX++;
                         newY--;
                         break;
                     case 6:
-                        newX--; // Down Left
+                        newX--;
                         newY++;
                         break;
                     case 7:
-                        newX++; // Down Right
+                        newX++;
                         newY++;
                         break;
                 }
-                // Check if the new position is within the battlefield boundaries
             } while (newX < 0 || newX >= battlefield->getWidth() || newY < 0 || newY >= battlefield->getHeight());
         }
-        // If a valid move is found, update the robot's position
         cout << name << " moved to (" << newX << ", " << newY << ")" << endl;
         
-        battlefield->updatePosition(getX(), getY(), newX, newY);
+        battlefield->updatePosition(this, getX(), getY(), newX, newY);
     }
 
     void step() override {
@@ -152,8 +143,8 @@ public:
 
         if (kills >= 3) {
             resetKills();
-            Robot* terminatorRoboCop = nullptr; // Initialize pointer
-            upgradeToTerminatorRoboCop(terminatorRoboCop); // Call the upgrade function
+            Robot* terminatorRoboCop = nullptr;
+            upgradeToTerminatorRoboCop(terminatorRoboCop);
         }
     }
 }
@@ -161,7 +152,6 @@ public:
 
 
     void fire(int x, int y) override {
-        // Terminator doesn't fire, so this can be left empty
     }
 };
 #endif

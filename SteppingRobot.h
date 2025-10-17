@@ -27,15 +27,12 @@ Tutorial Section: TT4L
 #include "Robot.h"
 using namespace std;
 
-// Declares that steppingRobot inherits from robot
 class SteppingRobot : virtual public Robot 
 {
 public:
-    // Constructor
     SteppingRobot(int x, int y, string name, char symbol, Battlefield* battlefield)
         : Robot(x, y, name, symbol, battlefield) {}
 
-    // Pure virtual function
     virtual void step() = 0; 
 };
 #endif

@@ -28,19 +28,14 @@ Tutorial Section: TT4L
 #include <iostream>
 using namespace std;
 
-void MadBot:: upgradeToRoboTank(Robot*& roboTank){
-    if (roboTank) {
-        roboTank = new RoboTank(getX(), getY(), getName(), battlefield);
+void MadBot::upgradeToRoboTank(Robot*& roboTank){
+    Robot* oldRobot = this;
 
-        roboTank->setLives(getLives());
-        roboTank->setKills(getKills());
+    roboTank = new RoboTank(getX(), getY(), getName(), battlefield);
 
-        cout << getName() << " has upgraded to UltimateRobot!" << endl;
-        battlefield->removeRobotAt(getX(), getY());
-        battlefield->addRobot(roboTank);
+    roboTank->setLives(getLives());
 
-        resetKills();
-    } else {
-        cout << "Error: UltimateRobot not initialized!" << endl;
-    }
+    cout << getName() << " has upgraded to RoboTank!" << endl;
+    battlefield->addRobot(roboTank);
+    battlefield->markRobotForRemoval(oldRobot);
 }
